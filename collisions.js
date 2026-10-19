@@ -46,7 +46,7 @@ function bounceOffPaddle() {
 }
 
 
-// The ball bounces off the bricks and removes the brick it hits.
+// The ball bounces off the bricks and sends each hit to the brick system.
 function bounceOffBricks() {
   for (let i = 0; i < bricks.length; i++) {
     const brick = bricks[i];
@@ -76,7 +76,7 @@ function bounceOffBricks() {
       }
     }
 
-    bricks.splice(i, 1);
+    hitBrickSystem(brick);
     break;  // bounce off one brick per update, then stop looking
   }
 }

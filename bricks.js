@@ -35,8 +35,8 @@ function makeBricks() {
 
 // Draws every brick in the list.
 function drawBricks() {
-  ctx.fillStyle = "white";
   for (const brick of bricks) {
+    ctx.fillStyle = brick.blockBreaker.hitsLeft === 1 ? "#ccc" : "white";
     ctx.fillRect(brick.x, brick.y, brick.width, brick.height);
   }
 }

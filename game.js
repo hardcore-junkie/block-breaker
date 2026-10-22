@@ -81,6 +81,11 @@ document.addEventListener("keyup", function (event) {
 // what they touched.
 // ------------------------------------------------------------
 function update() {
+
+  function movePaddleLeft() {
+  paddle.x = paddle.x - paddle.speed;
+}
+
   movePaddle();
   moveBall();
 

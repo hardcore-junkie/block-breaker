@@ -36,10 +36,14 @@ function makeBricks() {
 // Draws every brick in the list.
 function drawBricks() {
   for (const brick of bricks) {
-    ctx.fillStyle = rainbowMode
-      ? rainbowColor(brick.x + brick.y)
-      : brick.blockBreaker.hitsLeft === 1 ? "#ccc" : "white";
-    ctx.fillRect(brick.x, brick.y, brick.width, brick.height);
+    if (fryslanMode && fryslanImage.complete && fryslanImage.naturalWidth > 0) {
+      ctx.drawImage(fryslanImage, brick.x, brick.y, brick.width, brick.height);
+    } else {
+      ctx.fillStyle = rainbowMode
+        ? rainbowColor(brick.x + brick.y)
+        : brick.blockBreaker.hitsLeft === 1 ? "#ccc" : "white";
+      ctx.fillRect(brick.x, brick.y, brick.width, brick.height);
+    }
   }
 }
 

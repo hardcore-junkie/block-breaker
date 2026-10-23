@@ -64,9 +64,16 @@ let bricks = [];
 const keys = {};
 let rainbowMode = false;
 let rainbowHue = 0;
+let fryslanMode = false;
+const fryslanImage = new Image();
+fryslanImage.src = "images (8).jpeg";
 
 function rainbow() {
   rainbowMode = !rainbowMode;
+}
+
+function fryslan() {
+  fryslanMode = !fryslanMode;
 }
 
 function rainbowColor(offset = 0) {
@@ -77,6 +84,9 @@ document.addEventListener("keydown", function (event) {
   keys[event.key.toLowerCase()] = true;
   if (event.key.toLowerCase() === "r" && !event.repeat) {
     rainbow();
+  }
+  if (event.key.toLowerCase() === "f" && !event.repeat) {
+    fryslan();
   }
   // Stop the arrow keys from scrolling the page.
   if (event.key.startsWith("Arrow")) {

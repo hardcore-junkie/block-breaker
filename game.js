@@ -62,9 +62,22 @@ let bricks = [];
 // keys["arrowleft"] is true while the left arrow is held down.
 // ------------------------------------------------------------
 const keys = {};
+let rainbowMode = false;
+let rainbowHue = 0;
+
+function rainbow() {
+  rainbowMode = !rainbowMode;
+}
+
+function rainbowColor(offset = 0) {
+  return `hsl(${(rainbowHue + offset) % 360}, 100%, 50%)`;
+}
 
 document.addEventListener("keydown", function (event) {
   keys[event.key.toLowerCase()] = true;
+  if (event.key.toLowerCase() === "r" && !event.repeat) {
+    rainbow();
+  }
   // Stop the arrow keys from scrolling the page.
   if (event.key.startsWith("Arrow")) {
     event.preventDefault();
@@ -130,8 +143,13 @@ function draw() {
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-  ctx.fillStyle = "white";
+  if (rainbowMode) {
+    rainbowHue = (rainbowHue + 1) % 360;
+  }
+
+  ctx.fillStyle = rainbowMode ? rainbowColor(paddle.x) : "white";
   ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+  ctx.fillStyle = rainbowMode ? rainbowColor(ball.x) : "white";
   ctx.fillRect(ball.x, ball.y, ball.width, ball.height);
 
   drawBricks();  // bricks.js

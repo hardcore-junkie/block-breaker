@@ -65,8 +65,11 @@ const keys = {};
 let rainbowMode = false;
 let rainbowHue = 0;
 let fryslanMode = false;
+let netherMode = false;
 const fryslanImage = new Image();
 fryslanImage.src = "images (8).jpeg";
+const netherImage = new Image();
+netherImage.src = "Netherlands_Chibi_2011.webp";
 
 function rainbow() {
   rainbowMode = !rainbowMode;
@@ -74,6 +77,10 @@ function rainbow() {
 
 function fryslan() {
   fryslanMode = !fryslanMode;
+}
+
+function nether() {
+  netherMode = !netherMode;
 }
 
 function rainbowColor(offset = 0) {
@@ -87,6 +94,9 @@ document.addEventListener("keydown", function (event) {
   }
   if (event.key.toLowerCase() === "f" && !event.repeat) {
     fryslan();
+  }
+  if (event.key.toLowerCase() === "n" && !event.repeat) {
+    nether();
   }
   // Stop the arrow keys from scrolling the page.
   if (event.key.startsWith("Arrow")) {
@@ -159,8 +169,12 @@ function draw() {
 
   ctx.fillStyle = rainbowMode ? rainbowColor(paddle.x) : "white";
   ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
-  ctx.fillStyle = rainbowMode ? rainbowColor(ball.x) : "white";
-  ctx.fillRect(ball.x, ball.y, ball.width, ball.height);
+  if (netherMode && netherImage.complete && netherImage.naturalWidth > 0) {
+    ctx.drawImage(netherImage, ball.x, ball.y, ball.width, ball.height);
+  } else {
+    ctx.fillStyle = rainbowMode ? rainbowColor(ball.x) : "white";
+    ctx.fillRect(ball.x, ball.y, ball.width, ball.height);
+  }
 
   drawBricks();  // bricks.js
 }

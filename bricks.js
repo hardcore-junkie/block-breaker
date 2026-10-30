@@ -25,7 +25,7 @@ function makeBricks() {
         y: BRICKS_TOP + row * (BRICK_HEIGHT + BRICK_GAP),
         width: BRICK_WIDTH,
         height: BRICK_HEIGHT,
-        blockBreaker: createBlockBreakerComponent()
+        blockBreaker: createBlockBreakerComponent(row === 2 ? 2 : 1)
       });
     }
   }
@@ -41,7 +41,9 @@ function drawBricks() {
     } else {
       ctx.fillStyle = rainbowMode
         ? rainbowColor(brick.x + brick.y)
-        : brick.blockBreaker.hitsLeft === 1 ? "#ccc" : "white";
+        : brick.blockBreaker.maxHits === 2
+          ? brick.blockBreaker.hitsLeft === 2 ? "#555" : "#333"
+          : brick.blockBreaker.hitsLeft === 1 ? "#ccc" : "white";
       ctx.fillRect(brick.x, brick.y, brick.width, brick.height);
     }
   }

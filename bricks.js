@@ -9,6 +9,15 @@ const BRICK_HEIGHT = 20;
 const BRICK_GAP = 6;     // empty space between bricks
 const BRICKS_TOP = 50;   // how far down the first row starts
 
+function stayStill(brick) {}
+
+function slide(brick) {
+  brick.x += brick.speed;
+  if (Math.abs(brick.x - brick.startX) > 30) {
+    brick.speed *= -1;
+  }
+}
+
 // Builds the list of bricks. Each brick is an object with an
 // x, y, width, and height.
 function makeBricks() {
@@ -20,12 +29,16 @@ function makeBricks() {
 
   for (let row = 0; row < BRICK_ROWS; row++) {
     for (let col = 0; col < BRICK_COLUMNS; col++) {
+      const x = left + col * (BRICK_WIDTH + BRICK_GAP);
       list.push({
-        x: left + col * (BRICK_WIDTH + BRICK_GAP),
+        x,
         y: BRICKS_TOP + row * (BRICK_HEIGHT + BRICK_GAP),
         width: BRICK_WIDTH,
         height: BRICK_HEIGHT,
-        blockBreaker: createBlockBreakerComponent(row === 2 ? 2 : 1)
+        move: row === 0 ? slide : stayStill,
+        speed: row === 0 ? 2 : 0,
+        startX: x,
+        blockBreaker: createBlockBreakerComponent(row < BRICK_ROWS - 1 ? 2 : 1)
       });
     }
   }

@@ -47,7 +47,8 @@ const paddle = {
   y: HEIGHT - 30,
   width: 90,
   height: 12,
-  speed: 6
+  speed: 6,
+  flagUntil: 0
 };
 
 
@@ -170,8 +171,18 @@ function draw() {
     rainbowHue = (rainbowHue + 1) % 360;
   }
 
-  ctx.fillStyle = rainbowMode ? rainbowColor(paddle.x) : "white";
-  ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+  if (performance.now() < paddle.flagUntil) {
+    const stripeHeight = paddle.height / 3;
+    ctx.fillStyle = "#AE1C28";
+    ctx.fillRect(paddle.x, paddle.y, paddle.width, stripeHeight);
+    ctx.fillStyle = "white";
+    ctx.fillRect(paddle.x, paddle.y + stripeHeight, paddle.width, stripeHeight);
+    ctx.fillStyle = "#21468B";
+    ctx.fillRect(paddle.x, paddle.y + stripeHeight * 2, paddle.width, stripeHeight);
+  } else {
+    ctx.fillStyle = rainbowMode ? rainbowColor(paddle.x) : "white";
+    ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+  }
   if (netherMode && netherImage.complete && netherImage.naturalWidth > 0) {
     ctx.drawImage(netherImage, ball.x, ball.y, ball.width, ball.height);
   } else {

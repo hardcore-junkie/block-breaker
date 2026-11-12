@@ -38,6 +38,7 @@ function makeBricks() {
         move: row === 0 ? slide : stayStill,
         speed: row === 0 ? 2 : 0,
         startX: x,
+        shakeStartedAt: 0,
         blockBreaker: createBlockBreakerComponent(row < BRICK_ROWS - 1 ? 2 : 1)
       });
     }
@@ -49,21 +50,30 @@ function makeBricks() {
 // Draws every brick in the list.
 function drawBricks() {
   for (const brick of bricks) {
+    const shakeElapsed = performance.now() - brick.shakeStartedAt;
+    const shakeOffset = brick.blockBreaker.maxHits === 2 && shakeElapsed >= 0 && shakeElapsed < 250
+      ? Math.sin(shakeElapsed / 18 * Math.PI * 2) * (1 - shakeElapsed / 250) * 4
+      : 0;
+    const drawX = brick.x + shakeOffset;
+
     if (fryslanMode && fryslanImage.complete && fryslanImage.naturalWidth > 0) {
-      ctx.drawImage(fryslanImage, brick.x, brick.y, brick.width, brick.height);
+      ctx.drawImage(fryslanImage, drawX, brick.y, brick.width, brick.height);
     } else {
       ctx.fillStyle = rainbowMode
         ? rainbowColor(brick.x + brick.y)
         : brick.blockBreaker.maxHits === 2
           ? brick.blockBreaker.hitsLeft === 2 ? "#555" : "#333"
           : brick.blockBreaker.hitsLeft === 1 ? "#ccc" : "white";
-      ctx.fillRect(brick.x, brick.y, brick.width, brick.height);
+      ctx.fillRect(drawX, brick.y, brick.width, brick.height);
     }
   }
 }
 
 // Applies one hit to a brick and removes it when its component reaches zero.
 function hitBrickSystem(brick) {
+  if (brick.blockBreaker.maxHits === 2) {
+    brick.shakeStartedAt = performance.now();
+  }
   brick.blockBreaker.hitsLeft -= 1;
   if (brick.blockBreaker.hitsLeft === 0) {
     bricks.splice(bricks.indexOf(brick), 1);
